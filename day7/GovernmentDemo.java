@@ -14,7 +14,7 @@ public class GovernmentDemo {
 		s.setS(2, m);
 		RegistrationSeva re=new RegistrationSeva(p,h,r,f);
 		s.setS(3, re);
-		s.setService(3);
+		s.setService(3	);
 	}
 }
 class Service{
