@@ -41,7 +41,7 @@ public class DynamicBinding {
 			AllopathyMedcollege1 allo=new AllopathyMedcollege1();
 			
 			ajith=Proxy.newProxyInstance(ajith.getClass().getClassLoader(),
-					new Class[] {Steward.class,Surgeon.class}, 
+					new Class[] {Steward.class,Surgeon.class					}, 
 					new MyInvocationHandler1(new Object[] {ajith,allo,st}));
 			
 			
