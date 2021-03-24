@@ -3,11 +3,12 @@ package daytwelve;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.temporal.ChronoUnit;
 
 public class Assignment {
 	public static void main(String [] args) {
-		Delivery d=new Delivery(LocalDateTime.now(),10000,60,8);
+		Delivery d=new Delivery(LocalDateTime.now().withMonth(12).withDayOfMonth(31).withYear(2020),10000,60,8);
 		System.out.print(d.calcDuration());
 	}
 }
@@ -25,15 +26,19 @@ class Delivery
 	}
 	public static boolean checkleave(LocalDateTime d)
 	{
-		holiday h;
-		holiday[] hv=h.values();
+		holiday h=holiday.aug15;
+		holiday[] hv=holiday.values();
 		if(d.getDayOfWeek()==DayOfWeek.SUNDAY) {
+			System.out.println(d);
 			d=LocalDateTime.now().plus(1,ChronoUnit.DAYS);
 			return true;
 		}
 		else {
 			for(holiday hi:hv) {
-				if(hi.date==d) {
+				Month month=hi.date.getMonth();
+				int day=hi.date.getDayOfMonth();
+				if(month==d.getMonth()&&day==d.getDayOfMonth()) {
+					System.out.println(hi.date);
 					return true;
 				}
 			}
@@ -45,19 +50,22 @@ class Delivery
 		int noofdays=timereq/this.NoofHoursWorking;
 		int count=0;
 		LocalDateTime d=this.started;
+		//if(this.started<this.started.withHour(18))
 		//System.out.print(LocalDateTime.now().getDayOfWeek());
 		
-		holiday h;
+		holiday h=holiday.jan1;
 		int l=0;
-		while(noofdays==count){
+		while(noofdays!=count){
 			if(checkleave(d)) {
-				d=LocalDateTime.now().plus(noofdays,ChronoUnit.DAYS);
+				
 				l++;
 			}
 			else {
 			count++;}
+			d=d.plus(1,ChronoUnit.DAYS);
 		}
-		LocalDateTime day=LocalDateTime.now().plus((noofdays+l),ChronoUnit.DAYS);
+		System.out.println(l+" "+count);
+		LocalDateTime day=LocalDateTime.now().plus((noofdays+l+1),ChronoUnit.DAYS);
 		return day;
 		}
 	
