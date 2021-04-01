@@ -1,9 +1,15 @@
-package Asssignment1;
+package Project1;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.Map;
@@ -17,14 +23,18 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
-public class ExcelReadWrite {
-	public static void main(Map m,long mt) throws Exception {
+public class ExcelImpl  extends UnicastRemoteObject implements Excel,Serializable{
+	public ExcelImpl() throws RemoteException
+	{
+		System.out.print("excel cons");
+	}
+	public static void main(String [] args) throws Exception {
 		
-		String filename="C:\\\\Users\\\\VC\\\\eclipse-workspace\\\\basicproject\\\\InvoiceExcel.xlsx";  
-		int row=getrowExcel(filename);
-		System.out.print(row);
-		intoExcel(filename,m,row,mt);
-		System.out.print(getrowExcel(filename));
+		ExcelImpl excel=new ExcelImpl();
+		LocateRegistry.createRegistry(3000);
+		Naming.bind("rmi://localhost:3000/service/excel", excel);
+		//intoExcel(filename,m,row,mt);
+		//System.out.print(getrowExcel(filename));
 		//writeExcel(wb,sheet);
 		//readExcel(wb,sheet);		
 		} 
@@ -42,7 +52,11 @@ public class ExcelReadWrite {
 			return rcount;
 
 		}
-		public static  void intoExcel(String filename,Map m,int rcount,long mt) throws Exception {
+		@Override
+		public  void intoExcel(Map m,long mt) throws Exception {
+			String filename="C:\\\\Users\\\\VC\\\\eclipse-workspace\\\\basicproject\\\\InvoiceExcel.xlsx";  
+			int rcount=getrowExcel(filename);
+			
 			FileInputStream fis=new FileInputStream(filename);
 			XSSFWorkbook wb=new XSSFWorkbook(fis);
 			XSSFSheet sheet=wb.getSheetAt(0);
@@ -74,7 +88,12 @@ public class ExcelReadWrite {
 			wb.write(fo);
 			fo.close();
 		}
-		/*public static void readExcel(XSSFWorkbook wb,XSSFSheet sheet) {
+		public void readExcel() throws IOException {
+			String s="C:\\\\Users\\\\VC\\\\eclipse-workspace\\\\basicproject\\\\InvoiceExcel.xlsx";  
+			
+			FileInputStream fis=new FileInputStream(s);
+			XSSFWorkbook wb=new XSSFWorkbook(fis); 
+			XSSFSheet sheet=wb.getSheetAt(0); 
 		FormulaEvaluator formulaEvaluator=wb.getCreationHelper().createFormulaEvaluator();
 		  
 		for(Row row: sheet)    
@@ -95,5 +114,5 @@ public class ExcelReadWrite {
 		}
 	}	
 		
-	*/
+	
 }
